@@ -1,0 +1,9 @@
+Optimizer: COBYLA        --- 6.718605995178223 seconds ---
+Optimizer: L_BFGS_B        --- 7.999790668487549 seconds ---
+Optimizer: SLSQP        --- 5.453037261962891 seconds ---
+Optimizer: ADAM        --- 22.296379566192627 seconds ---
+Optimizer: CG        --- 19.780779600143433 seconds ---
+Optimizer: AQGD        --- 43.722890853881836 seconds ---
+Optimizer: GradientDescent        --- 22.85887360572815 seconds ---
+Optimizer: SPSA        --- 11.921603918075562 seconds ---
+Optimization complete
