@@ -6,6 +6,7 @@ from QAOA import QAOA
 from EDAspy.optimization.univariate import EDA_continuous as EDAc
 from qiskit import Aer
 import random
+import pickle
 
 random.seed(1234)
 
@@ -15,6 +16,9 @@ n_shots = 100
 
 max_cut = MaxCut(n_nodes=n_nodes)
 max_cut.random_graph(per_arcs=0.8)
+
+with open('max_cut_'+str(n_nodes)+'.pkl', 'wb') as config_max_cut_file:
+    pickle.dump(max_cut, config_max_cut_file)
 
 # initial vector of statistics
 vector = pd.DataFrame(columns=list(range(0, p*2)))
