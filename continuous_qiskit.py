@@ -48,6 +48,8 @@ class UMDAc:
     history = []
     setting = "---"
 
+    elite_factor = 0.4
+
     def __init__(self, size_gen, max_iter, dead_iter, alpha, vector):
         """Constructor of the optimizer class
         """
@@ -100,9 +102,13 @@ class UMDAc:
             # drop duplicate individuals
             gen = gen.drop_duplicates()
             gen = gen.reset_index(drop=True)
-            # del gen['index']
 
-        self.generation = gen
+        # self.generation = gen
+        if type(self.generation) is pd.DataFrame:
+            self.generation = self.generation.nsmallest(int(self.elite_factor*len(self.generation)), 'cost')
+            self.generation = self.generation.append(gen).reset_index(drop=True)
+        else:
+            self.generation = gen
 
     # truncate the generation at alpha percent
     def truncation(self):
@@ -148,7 +154,7 @@ class UMDAc:
         :rtype: bool
         """
 
-        return local <= self.best_mae_global
+        return local < self.best_mae_global
 
     def minimize(self, fun, x0, jac, bounds):
 
@@ -163,6 +169,7 @@ class UMDAc:
 
             self.history.append(best_mae_local)
             best_ind_local = self.generation[self.generation['cost'] == best_mae_local]
+            print(i, self.best_mae_global, not_better, best_mae_local)
 
             # update the best values ever
             # if best_mae_local <= self.best_mae_global:
