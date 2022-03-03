@@ -1,12 +1,11 @@
 import numpy as np
-import pylab
+import pandas as pd
 
 from qiskit import Aer
 from qiskit.utils import QuantumInstance
 from qiskit.algorithms import QAOA
 from qiskit.algorithms.optimizers import COBYLA, L_BFGS_B, SLSQP, ADAM, CG, AQGD, GSLS, GradientDescent, SPSA
 import pickle
-import matplotlib.pyplot as plt
 import random
 import time
 
@@ -21,39 +20,41 @@ qubit_op, _ = max_cut.get_operator()
 optimizers = [COBYLA(maxiter=100), L_BFGS_B(maxiter=100), SLSQP(maxiter=100),
               ADAM(maxiter=100), CG(maxiter=100), AQGD(maxiter=100),
               GradientDescent(maxiter=100), SPSA(maxiter=100)]
+optimizers_names = ['COBYLA', 'L_BFGS_B', 'SLSQP', 'ADAM', 'CG', 'AQGD', 'GradientDescent', 'SPSA']
 
 converge_cnts = np.empty([len(optimizers)], dtype=object)
 converge_vals = np.empty([len(optimizers)], dtype=object)
 
+iterations = range(10)
+ps = range(1, 8)
+index = 0
+filename = 'output_optimizers.csv'
+dt = pd.DataFrame(columns=['opt', 'it', 'p', 'best_cost', 'time'])
+
 for i, optimizer in enumerate(optimizers):
-    print('\rOptimizer: {}        '.format(type(optimizer).__name__), end='')
 
-    counts = []
-    values = []
+    for p in ps:
+        for it in iterations:
+            start_time = time.time()
 
-    def store_intermediate_result(eval_count, parameters, mean, std):
-        counts.append(eval_count)
-        values.append(mean)
+            counts = []
+            values = []
 
-    start_time = time.time()
-    vqe = QAOA(optimizer, callback=store_intermediate_result,
-               quantum_instance=QuantumInstance(backend=Aer.get_backend('statevector_simulator')), reps=2)
-    result = vqe.compute_minimum_eigenvalue(operator=qubit_op)
-    finish_time = time.time()
+            def store_intermediate_result(eval_count, parameters, mean, std):
+                counts.append(eval_count)
+                values.append(mean)
 
-    converge_cnts[i] = np.asarray(counts)
-    converge_vals[i] = np.asarray(values)
 
-    print("--- %s seconds ---" % (finish_time - start_time))
-print('\rOptimization complete      ')
+            vqe = QAOA(optimizer, callback=store_intermediate_result,
+                       quantum_instance=QuantumInstance(backend=Aer.get_backend('statevector_simulator')), reps=p)
+            result = vqe.compute_minimum_eigenvalue(operator=qubit_op)
+            finish_time = time.time()
 
-pylab.rcParams['figure.figsize'] = (6, 6)
-for i, optimizer in enumerate(optimizers):
-    pylab.plot(converge_cnts[i], converge_vals[i], label=type(optimizer).__name__)
+            converge_cnts[i] = np.asarray(counts)
+            converge_vals[i] = np.asarray(values)
 
-pylab.xlabel('Eval count')
-pylab.ylabel('Energy')
-pylab.title('Energy convergence for various optimizers')
-pylab.legend(loc='upper right')
-plt.savefig('comparison.png')
-plt.show()
+            dt.loc[index] = [optimizers_names[i], it, p, min(converge_vals[i]), finish_time-start_time]
+            dt.to_csv(filename)
+            index = index + 1
+
+            # TODO: save the optimum parameters
