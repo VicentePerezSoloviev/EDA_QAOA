@@ -11,7 +11,7 @@ vector is a table with, columns as variables, and rows with mu, std, and optiona
 
 class UMDAc:
 
-    """Univariate marginal Estimation of Distribution algorithm continuous.
+    """continuous univariate marginal Estimation of Distribution algorithm.
     New individuals are sampled from a vector of univariate normal distributions.
 
     :param size_gen: total size of the generations in the execution of the algorithm
@@ -24,10 +24,6 @@ class UMDAc:
     :type alpha: float [0-1]
     :param vector: vector of normal distributions to sample from
     :type vector: pandas dataframe with columns ['mu', 'std'] and optional ['min', 'max']
-    :param aim: Represents the optimization aim.
-    :type aim: 'minimize' or 'maximize'.
-    :param cost_function: a callable function implemented by the user, to optimize.
-    :type cost_function: callable function which receives a dictionary as input and returns a numeric
 
     :raises Exception: cost function is not callable
 
@@ -112,7 +108,7 @@ class UMDAc:
 
     # truncate the generation at alpha percent
     def truncation(self):
-        """ Selection of the best individuals of the actual generation. Updates the generation by selecting the best individuals
+        """Selection of the best individuals of the actual generation. Updates the generation by selecting the best individuals
         """
         length = int(self.SIZE_GEN * self.alpha)
         self.generation = self.generation.nsmallest(length, 'cost')
@@ -169,10 +165,8 @@ class UMDAc:
 
             self.history.append(best_mae_local)
             best_ind_local = self.generation[self.generation['cost'] == best_mae_local]
-            print(i, self.best_mae_global, not_better, best_mae_local)
 
             # update the best values ever
-            # if best_mae_local <= self.best_mae_global:
             if self.__compare_costs__(best_mae_local):
                 self.best_mae_global = best_mae_local
                 self.best_ind_global = best_ind_local
@@ -182,7 +176,6 @@ class UMDAc:
                 if not_better == self.DEAD_ITER:
                     return EdaResult(self.best_ind_global.reset_index(drop=True).loc[0].to_list()[:-1], self.best_mae_global, len(self.history))
 
-        # return self.best_mae_global, self.best_ind_global, self.history
         return EdaResult(self.best_ind_global.reset_index(drop=True).loc[0].to_list()[:-1], self.best_mae_global, len(self.history))
 
 

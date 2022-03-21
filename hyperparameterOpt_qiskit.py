@@ -29,11 +29,10 @@ def create_vector(p):
     return vec
 
 
-ps = range(1, 8)
-n_shotss = [50, 100, 200]
-size_gens = [2, 5, 10, 15]
+ps = range(8, 12)
+size_gens = [10, 20, 30, 40, 50, 60]
 
-filename = 'output_eda.csv'
+filename = 'output_eda_elite_2.csv'
 dt = pd.DataFrame(columns=['opt', 'it', 'p', 'size_gen', 'best_cost', 'time'])
 
 index = 0
@@ -41,7 +40,7 @@ for p in ps:
     for size_gen in size_gens:
         for it in range(10):
             vector = create_vector(p)
-            eda = EDAc(size_gen=size_gen, max_iter=200, dead_iter=15, alpha=0.7, vector=vector)
+            eda = EDAc(size_gen=size_gen, max_iter=500, dead_iter=20, alpha=0.7, vector=vector)
 
             counts = []
             values = []
@@ -52,11 +51,11 @@ for p in ps:
 
             vqe = QAOA(eda, callback=store_intermediate_result,
                        quantum_instance=QuantumInstance(backend=Aer.get_backend('statevector_simulator')), reps=p)
-            start_time = time.time()
-            result = vqe.compute_minimum_eigenvalue(operator=qubit_op)
-            finish_time = time.time()
+            start_time = time.process_time()
+            result = vqe.compute_minimum_eigenvalue(operator=qubit_op)  # result is VQEResult
+            finish_time = time.process_time()
 
-            dt.loc[index] = ['eda', it, p, size_gen, min(values), finish_time - start_time]
+            dt.loc[index] = ['eda', it, p, size_gen, result.optimal_value, finish_time-start_time]
             dt.to_csv(filename)
             index = index + 1
 
