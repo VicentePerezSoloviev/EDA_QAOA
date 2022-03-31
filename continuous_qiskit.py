@@ -60,7 +60,7 @@ class UMDAc:
         self.best_mae_global = 999999999999
 
         # self.DEAD_ITER must be fewer than MAX_ITER
-        if dead_iter >= max_iter:
+        if dead_iter > max_iter:
             raise Exception('ERROR setting DEAD_ITER. The dead iterations must be fewer than the maximum iterations')
         else:
             self.DEAD_ITER = dead_iter
@@ -83,6 +83,9 @@ class UMDAc:
             while sample < self.vector.loc['min', var] or sample > self.vector.loc['max', var]:
                 sample = np.random.normal(mu, std, 1)
 
+            # TODO: remove while loop and do not consider min and max
+            # TODO: insert directly to pandas instead of intermediate dict
+
             dic[var] = sample[0]
         return dic
 
@@ -99,6 +102,8 @@ class UMDAc:
             gen = gen.drop_duplicates()
             gen = gen.reset_index(drop=True)
 
+        # TODO: integrate the new_individual instead of a loop
+
         # self.generation = gen
         if type(self.generation) is pd.DataFrame:
             self.generation = self.generation.nsmallest(int(self.elite_factor*len(self.generation)), 'cost')
@@ -106,11 +111,13 @@ class UMDAc:
         else:
             self.generation = gen
 
+        # TODO: remove if and implement into run function as a initialization or in __init__
+
     # truncate the generation at alpha percent
     def truncation(self):
         """Selection of the best individuals of the actual generation. Updates the generation by selecting the best individuals
         """
-        length = int(self.SIZE_GEN * self.alpha)
+        length = int(self.SIZE_GEN * self.alpha)  # TODO: set into initialization
         self.generation = self.generation.nsmallest(length, 'cost')
 
     # check each individual of the generation
@@ -120,6 +127,8 @@ class UMDAc:
         for ind in range(len(self.generation)):
             cost = objective_function(self.generation.loc[ind, self.generation.columns != 'cost'].to_list())
             self.generation.loc[ind, 'cost'] = cost
+
+        # TODO: pandas function to calculate as columns
 
     # update the probability vector
     def update_vector(self):

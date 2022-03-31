@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 from qiskit.algorithms import QAOA
-from continuous_qiskit import UMDAc as EDAc
+from continuous_qiskit_optimized import UMDAc as EDAc
 from qiskit import Aer
 import random
 import time
@@ -11,7 +11,7 @@ from qiskit.utils import QuantumInstance
 random.seed(1234)
 
 
-with open('max_cut_10.pkl', 'rb') as file:
+with open('max_cut_12.pkl', 'rb') as file:
     max_cut = pickle.load(file)
 
 qubit_op, _ = max_cut.get_operator()
@@ -32,7 +32,7 @@ def create_vector(p):
 ps = range(1, 12)
 size_gens = [10, 20, 30]
 
-filename = 'output_eda_elite_3.csv'
+filename = 'output_eda_12.csv'
 dt = pd.DataFrame(columns=['opt', 'it', 'p', 'size_gen', 'best_cost', 'time'])
 
 index = 0
@@ -40,7 +40,7 @@ for p in ps:
     for size_gen in size_gens:
         for it in range(15):
             vector = create_vector(p)
-            eda = EDAc(size_gen=size_gen, max_iter=500, dead_iter=20, alpha=0.7, vector=vector)
+            eda = EDAc(size_gen=size_gen, max_iter=100, dead_iter=20, alpha=0.7, vector=vector)
 
             counts = []
             values = []
@@ -51,6 +51,7 @@ for p in ps:
 
             vqe = QAOA(eda, callback=store_intermediate_result,
                        quantum_instance=QuantumInstance(backend=Aer.get_backend('statevector_simulator')), reps=p)
+            # by default 1024 shots
             start_time = time.process_time()
             result = vqe.compute_minimum_eigenvalue(operator=qubit_op)  # result is VQEResult
             finish_time = time.process_time()
@@ -60,4 +61,3 @@ for p in ps:
             dt.to_csv(filename)
             index = index + 1
 
-            # TODO: save optimum parameters

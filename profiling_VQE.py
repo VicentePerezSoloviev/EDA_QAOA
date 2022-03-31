@@ -1,12 +1,14 @@
 import pandas as pd
 import numpy as np
-from qiskit.algorithms import QAOA
-from continuous_qiskit import UMDAc as EDAc
+from qiskit.algorithms import QAOA, VQE
+from continuous_qiskit_optimized import UMDAc as EDAc
 from qiskit import Aer
 import random
 import time
 import pickle
 from qiskit.utils import QuantumInstance
+from qiskit.circuit.library import TwoLocal
+from qiskit.providers.aer.noise import depolarizing_error, NoiseModel, amplitude_damping_error, phase_damping_error
 
 random.seed(1234)
 
@@ -17,8 +19,8 @@ with open('max_cut_10.pkl', 'rb') as file:
 qubit_op, _ = max_cut.get_operator()
 
 
-def create_vector(p):
-    vec = pd.DataFrame(columns=list(range(0, p * 2)))
+def create_vector(num_params):
+    vec = pd.DataFrame(columns=list(range(0, num_params)))
     vec['data'] = ['mu', 'std', 'min', 'max']
     vec = vec.set_index('data')
     vec.loc['mu'] = np.pi
@@ -29,18 +31,19 @@ def create_vector(p):
     return vec
 
 
-ps = range(1, 12)
+ps = range(1, 7)
 size_gens = [10, 20, 30]
 
-filename = 'output_eda_elite_3.csv'
+filename = 'output_eda_elite_3_opt_vqe.csv'
 dt = pd.DataFrame(columns=['opt', 'it', 'p', 'size_gen', 'best_cost', 'time'])
 
 index = 0
 for p in ps:
     for size_gen in size_gens:
         for it in range(15):
-            vector = create_vector(p)
-            eda = EDAc(size_gen=size_gen, max_iter=500, dead_iter=20, alpha=0.7, vector=vector)
+            ansatz = TwoLocal(rotation_blocks='ry', entanglement_blocks='cz', reps=p)
+            vector = create_vector(p*10 + 10)
+            eda = EDAc(size_gen=size_gen, max_iter=100, dead_iter=20, alpha=0.7, vector=vector)
 
             counts = []
             values = []
@@ -49,8 +52,10 @@ for p in ps:
                 counts.append(eval_count)
                 values.append(mean)
 
-            vqe = QAOA(eda, callback=store_intermediate_result,
-                       quantum_instance=QuantumInstance(backend=Aer.get_backend('statevector_simulator')), reps=p)
+
+            vqe = VQE(ansatz, eda, callback=store_intermediate_result,
+                      quantum_instance=QuantumInstance(backend=Aer.get_backend('statevector_simulator')))
+            # by default 1024 shots
             start_time = time.process_time()
             result = vqe.compute_minimum_eigenvalue(operator=qubit_op)  # result is VQEResult
             finish_time = time.process_time()
@@ -59,5 +64,3 @@ for p in ps:
             print('eda', it, p, size_gen, result.optimal_value, finish_time-start_time)
             dt.to_csv(filename)
             index = index + 1
-
-            # TODO: save optimum parameters

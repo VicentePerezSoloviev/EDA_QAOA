@@ -3,15 +3,16 @@ import pandas as pd
 
 from qiskit import Aer
 from qiskit.utils import QuantumInstance
-from qiskit.algorithms import QAOA
+from qiskit.algorithms import QAOA, VQE
 from qiskit.algorithms.optimizers import COBYLA, L_BFGS_B, SLSQP, ADAM, CG, AQGD, GSLS, GradientDescent, SPSA
 import pickle
 import random
 import time
+from qiskit.circuit.library import TwoLocal
 
 random.seed(1234)
 
-with open('max_cut_12.pkl', 'rb') as file:
+with open('max_cut_10.pkl', 'rb') as file:
     max_cut = pickle.load(file)
 
 qubit_op, _ = max_cut.get_operator()
@@ -25,16 +26,16 @@ converge_cnts = np.empty([len(optimizers)], dtype=object)
 converge_vals = np.empty([len(optimizers)], dtype=object)
 
 iterations = range(10)
-ps = range(1, 12)
+ps = range(1, 7)
 index = 0
-filename = 'output_optimizers_12.csv'
+filename = 'output_optimizers_10_vqe.csv'
 dt = pd.DataFrame(columns=['opt', 'it', 'p', 'best_cost', 'time'])
 
 for i, optimizer in enumerate(optimizers):
-
     for p in ps:
         for it in iterations:
             start_time = time.process_time()
+            ansatz = TwoLocal(rotation_blocks='ry', entanglement_blocks='cz', reps=p)
 
             counts = []
             values = []
@@ -44,8 +45,8 @@ for i, optimizer in enumerate(optimizers):
                 values.append(mean)
 
 
-            vqe = QAOA(optimizer, callback=store_intermediate_result,
-                       quantum_instance=QuantumInstance(backend=Aer.get_backend('statevector_simulator')), reps=p)
+            vqe = VQE(ansatz, optimizer, callback=store_intermediate_result,
+                      quantum_instance=QuantumInstance(backend=Aer.get_backend('statevector_simulator')))
             result = vqe.compute_minimum_eigenvalue(operator=qubit_op)
             finish_time = time.process_time()
 
@@ -55,5 +56,3 @@ for i, optimizer in enumerate(optimizers):
             dt.loc[index] = [optimizers_names[i], it, p, min(converge_vals[i]), finish_time-start_time]
             dt.to_csv(filename)
             index = index + 1
-
-            # TODO: save the optimum parameters

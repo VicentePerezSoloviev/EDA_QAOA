@@ -30,31 +30,32 @@ def create_vector():
 
 
 ps = range(1, 8)
-n_shotss = [50, 100, 200]
-size_gens = [2, 5, 10, 15]
+n_shotss = [50, 100, 200, 300]
+size_gens = [10, 20, 30]
 
 results = pd.DataFrame(columns=['p', 'n_shots', 'size_gen', 'it', 'time', 'best_cost', 'conv'])
-filename = 'results.csv'
+filename = 'results_2.csv'
 
 index = 0
 for p in ps:
     for n_shots in n_shotss:
         for size_gen in size_gens:
-            for it in range(10):
+            for it in range(15):
                 qaoa = QAOA(max_cut=max_cut, p=p, backend=Aer.get_backend('qasm_simulator'))
 
                 history = []
                 vector = create_vector()
 
-                EDA = EDAc(SIZE_GEN=size_gen, MAX_ITER=50, DEAD_ITER=10, ALPHA=0.7, vector=vector,
+                EDA = EDAc(SIZE_GEN=size_gen, MAX_ITER=200, DEAD_ITER=20, ALPHA=0.7, vector=vector,
                            aim='minimize', cost_function=qaoa.compute_minimum_eigenvalue(n_shots=n_shots))
 
-                start_time = time.time()
+                start_time = time.process_time()
                 best_cost, params, history = EDA.run()
-                finish_time = time.time()
+                finish_time = time.process_time()
 
                 results.loc[index] = [p, n_shots, size_gen, it,
                                       finish_time-start_time, best_cost, len(history)]
+                print(p, n_shots, size_gen, it, finish_time-start_time, best_cost, len(history))
                 index = index + 1
                 results.to_csv(filename)
 

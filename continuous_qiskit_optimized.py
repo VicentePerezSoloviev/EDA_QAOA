@@ -71,7 +71,7 @@ class UMDAc:
         mus = self.vector[self.variables].loc['mu'].to_list()
         stds = self.vector[self.variables].loc['std'].to_list()
         self.generation = pd.DataFrame(np.random.normal(mus, stds, [self.SIZE_GEN, len(self.variables)]),
-                                       columns=self.variables)
+                                       columns=self.variables, dtype='float_')
 
     def set_max_evals_grouped(self, max_evals_grouped):
         pass
@@ -83,7 +83,8 @@ class UMDAc:
 
         mus = self.vector[self.variables].loc['mu'].to_list()
         stds = self.vector[self.variables].loc['std'].to_list()
-        gen = pd.DataFrame(np.random.normal(mus, stds, [self.SIZE_GEN, len(self.variables)]), columns=self.variables)
+        gen = pd.DataFrame(np.random.normal(mus, stds, [self.SIZE_GEN, len(self.variables)]),
+                           columns=self.variables, dtype='float_')
 
         self.generation = self.generation.nsmallest(int(self.elite_factor*len(self.generation)), 'cost')
         self.generation = self.generation.append(gen).reset_index(drop=True)

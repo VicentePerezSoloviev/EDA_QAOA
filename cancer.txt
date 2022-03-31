@@ -1,0 +1,120 @@
+Pollution Cancer Dyspnoea -1060.52748624943
+Pollution Cancer -1056.4743538186
+Pollution Dyspnoea -1055.11468385284
+Pollution -1053.50412263785
+Pollution Cancer Smoker -1061.76707450623
+Pollution Cancer -1056.4743538186
+Pollution Smoker -1055.86822612009
+Pollution -1053.50412263785
+Pollution Cancer Xray -1059.98531433053
+Pollution Cancer -1056.4743538186
+Pollution Xray -1056.59267370563
+Pollution -1053.50412263785
+Pollution Dyspnoea Smoker -1060.63013963356
+Pollution Dyspnoea -1055.11468385284
+Pollution Smoker -1055.86822612009
+Pollution -1053.50412263785
+Pollution Dyspnoea Xray -1060.93180131588
+Pollution Dyspnoea -1055.11468385284
+Pollution Xray -1056.59267370563
+Pollution -1053.50412263785
+Pollution Smoker Xray -1058.96180561023
+Pollution Smoker -1055.86822612009
+Pollution Xray -1056.59267370563
+Pollution -1053.50412263785
+Smoker Cancer Dyspnoea -1053.66080630776
+Smoker Cancer -1048.79107773709
+Smoker Dyspnoea -1055.36852947444
+Smoker -1053.50412263785
+Smoker Cancer Pollution -1054.08379842473
+Smoker Cancer -1048.79107773709
+Smoker Pollution -1055.86822612009
+Smoker -1053.50412263785
+Smoker Cancer Xray -1054.80943760409
+Smoker Cancer -1048.79107773709
+Smoker Xray -1055.76027945484
+Smoker -1053.50412263785
+Smoker Dyspnoea Pollution -1060.88398525516
+Smoker Dyspnoea -1055.36852947444
+Smoker Pollution -1055.86822612009
+Smoker -1053.50412263785
+Smoker Dyspnoea Xray -1060.65278131456
+Smoker Dyspnoea -1055.36852947444
+Smoker Xray -1055.76027945484
+Smoker -1053.50412263785
+Smoker Pollution Xray -1058.12941135944
+Smoker Pollution -1055.86822612009
+Smoker Xray -1055.76027945484
+Smoker -1053.50412263785
+Cancer Dyspnoea Pollution -1062.00648549751
+Cancer Dyspnoea -1056.59368310092
+Cancer Pollution -1056.4743538186
+Cancer -1053.50412263785
+Cancer Dyspnoea Smoker -1054.88595993424
+Cancer Dyspnoea -1056.59368310092
+Cancer Smoker -1048.79107773709
+Cancer -1053.50412263785
+Cancer Dyspnoea Xray -1056.59543887275
+Cancer Dyspnoea -1056.59368310092
+Cancer Xray -1050.80340088598
+Cancer -1053.50412263785
+Cancer Pollution Smoker -1054.68992612323
+Cancer Pollution -1056.4743538186
+Cancer Smoker -1048.79107773709
+Cancer -1053.50412263785
+Cancer Pollution Xray -1054.19604151088
+Cancer Pollution -1056.4743538186
+Cancer Xray -1050.80340088598
+Cancer -1053.50412263785
+Cancer Smoker Xray -1049.85255903523
+Cancer Smoker -1048.79107773709
+Cancer Xray -1050.80340088598
+Cancer -1053.50412263785
+Xray Cancer Dyspnoea -1056.48047827323
+Xray Cancer -1050.80340088598
+Xray Dyspnoea -1056.4787225014
+Xray -1053.50412263785
+Xray Cancer Pollution -1054.31436139791
+Xray Cancer -1050.80340088598
+Xray Pollution -1056.59267370563
+Xray -1053.50412263785
+Xray Cancer Smoker -1056.82176075298
+Xray Cancer -1050.80340088598
+Xray Smoker -1055.76027945484
+Xray -1053.50412263785
+Xray Dyspnoea Pollution -1062.29583996444
+Xray Dyspnoea -1056.4787225014
+Xray Pollution -1056.59267370563
+Xray -1053.50412263785
+Xray Dyspnoea Smoker -1061.76297434151
+Xray Dyspnoea -1056.4787225014
+Xray Smoker -1055.76027945484
+Xray -1053.50412263785
+Xray Pollution Smoker -1058.85385894498
+Xray Pollution -1056.59267370563
+Xray Smoker -1055.76027945484
+Xray -1053.50412263785
+Dyspnoea Cancer Pollution -1060.64681553176
+Dyspnoea Cancer -1056.59368310092
+Dyspnoea Pollution -1055.11468385284
+Dyspnoea -1053.50412263785
+Dyspnoea Cancer Smoker -1061.46341167159
+Dyspnoea Cancer -1056.59368310092
+Dyspnoea Smoker -1055.36852947444
+Dyspnoea -1053.50412263785
+Dyspnoea Cancer Xray -1062.27076048818
+Dyspnoea Cancer -1056.59368310092
+Dyspnoea Xray -1056.4787225014
+Dyspnoea -1053.50412263785
+Dyspnoea Pollution Smoker -1060.13044298791
+Dyspnoea Pollution -1055.11468385284
+Dyspnoea Smoker -1055.36852947444
+Dyspnoea -1053.50412263785
+Dyspnoea Pollution Xray -1060.81785011165
+Dyspnoea Pollution -1055.11468385284
+Dyspnoea Xray -1056.4787225014
+Dyspnoea -1053.50412263785
+Dyspnoea Smoker Xray -1061.37122436112
+Dyspnoea Smoker -1055.36852947444
+Dyspnoea Xray -1056.4787225014
+Dyspnoea -1053.50412263785
