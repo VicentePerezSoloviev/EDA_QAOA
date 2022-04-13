@@ -6,3 +6,6 @@ prueba.py
 *.ipynb
 *.pdf
 *.png
+*_VQE*
+qubo_formulation.py
+eda_QAOA_bnsl.py
